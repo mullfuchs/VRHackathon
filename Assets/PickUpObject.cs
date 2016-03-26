@@ -7,6 +7,7 @@ public class PickUpObject : MonoBehaviour {
 
 	// Use this for initialization
 	public Material HighlightMaterial;
+	public Material UnhighlightMaterial;
 
 	private GameObject HighlightedObject;
 
@@ -18,7 +19,14 @@ public class PickUpObject : MonoBehaviour {
 	void FixedUpdate () {
 		CastRayForward ();
 		if (Input.GetMouseButtonDown (0)) {
-			
+			if(HighlightedObject != null)
+				HighlightedObject.transform.parent = this.transform;
+		}
+
+		if(Input.GetMouseButtonUp(0)) {
+			if(HighlightedObject != null)
+				HighlightedObject.GetComponent<Rigidbody>().isKinematic = false;
+				HighlightedObject.transform.parent = null;
 		}
 	}
 
@@ -30,12 +38,13 @@ public class PickUpObject : MonoBehaviour {
 				hit.transform.gameObject.GetComponent<Renderer> ().material = HighlightMaterial;
 				HighlightedObject = hit.transform.gameObject;
 			}
-		} 
-		else {
-			if(HighlightedObject != null){
-				//HighlightedObject
+			else {
+				if(HighlightedObject != null){
+					HighlightedObject.GetComponent<Renderer>().material = UnhighlightMaterial;
+				}
 			}
-		}
+		} 
+
 	}
 
 
